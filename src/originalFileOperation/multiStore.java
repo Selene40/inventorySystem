@@ -1,18 +1,19 @@
 package originalFileOperation;
 
-public class mainTest {
+import org.apache.poi.ss.usermodel.Workbook;
 
-    public static void main(String[] args) {
-        multiStore.operation("06店库存周转及订货量控制标准7.29.xlsx","example2-2.xlsx");
-        multiStore.operation("06店库存周转及订货量控制标准7.29.xlsx","example2-3.xlsx");
-//        multiStore.operation("06店库存周转及订货量控制标准7.29.xlsx","");
-//        multiStore.operation("06店库存周转及订货量控制标准7.29.xlsx","");
-    }
-/*    private static Logger logger = Logger.getLogger(mainTest.class.getName());
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Logger;
 
-    public static void main(String[] args) {
+
+public class multiStore {
+    private static Logger logger = Logger.getLogger(mainTest.class.getName());
+    public static void operation(String input, String output) {
         // 设定Excel文件所在路径
-        String excelFileName = "./inputFiles/06店库存周转及订货量控制标准7.29.xlsx";
+        String excelFileName = "./inputFiles/" + input;
         // 读取Excel文件内容
         List<dataVO> readResult = excelReader.readExcel(excelFileName);
         // 写入数据到工作簿对象内
@@ -20,7 +21,7 @@ public class mainTest {
         // 以文件的形式输出工作簿对象
         FileOutputStream fileOut = null;
         try {
-            String exportFilePath = "./outputFiles/writeExample1.xlsx";
+            String exportFilePath = "./outputFiles/" + output;
             File exportFile = new File(exportFilePath);
             if (!exportFile.exists()) {
                 exportFile.createNewFile();
@@ -42,5 +43,5 @@ public class mainTest {
                 logger.warning("关闭输出流时发生错误，错误原因：" + e.getMessage());
             }
         }
-    }*/
+    }
 }
