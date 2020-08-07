@@ -1,5 +1,19 @@
-package originalFileOperation;
+package test;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import originalFileOperation.dataVO;
+import originalFileOperation.excelReader;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -9,12 +23,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class excelReader {
-    private static Logger logger = Logger.getLogger(excelReader.class.getName()); // 日志打印类
+public class testReader {
+
+    private static Logger logger = Logger.getLogger(originalFileOperation.excelReader.class.getName()); // 日志打印类
     private static final String XLS = "xls";
     private static final String XLSX = "xlsx";
 
@@ -108,13 +122,13 @@ public class excelReader {
                 }
                 dataVO resultData = convertRowToData(row);
 /*                if (rowNum == rowStart + 1) {
-                    System.out.println(resultData.getProductName());
-                    System.out.println(resultData.getProductCode());
-                    System.out.println(resultData.getAverageDailySales());
-                    System.out.println(resultData.getLowerLimit());
-                    System.out.println(resultData.getUpperLimit());
-                    System.out.println(resultData.getOnHandInventory());
-                }*/
+                System.out.println(resultData.getProductName());
+                System.out.println(resultData.getProductCode());
+                System.out.println(resultData.getAverageDailySales());
+                System.out.println(resultData.getLowerLimit());
+                System.out.println(resultData.getUpperLimit());
+                System.out.println(resultData.getOnHandInventory());
+            }*/
                 if (null == resultData) {
                     logger.warning("第 " + row.getRowNum() + "行数据不合法，已忽略！");
                     continue;
@@ -125,6 +139,49 @@ public class excelReader {
         return resultDataList;
     }
 
+
+    /*
+    *         dataVO resultData = new dataVO();
+        Cell cell;
+
+        // 获取编码
+        cell = row.getCell(0);
+        cell.setCellType(CellType.STRING);
+        String name = cell.getStringCellValue();
+        resultData.setProductCode(name);
+        // 获取品名
+        cell = row.getCell(1);
+        cell.setCellType(CellType.STRING);
+        String pCode = cell.getStringCellValue();
+        resultData.setProductName(pCode);
+        // 获取配送周期
+        cell = row.getCell(5);
+        cell.setCellType(CellType.STRING);
+        String day = cell.getStringCellValue();
+        resultData.setDeliveryCycle(day);
+        // 获取日均销量
+        cell = row.getCell(7);
+        cell.setCellType(CellType.STRING);
+        String averDSales = cell.getStringCellValue();
+        resultData.setAverageDailySales(averDSales);
+        // 获取商品陈列面位数
+        cell = row.getCell(10);
+        cell.setCellType(CellType.STRING);
+        String count = cell.getStringCellValue();
+        resultData.setShelfCount(count);
+        // 获取货架纵深单面陈列量
+        cell = row.getCell(11);
+        cell.setCellType(CellType.STRING);
+        String singleShelfNum = cell.getStringCellValue();
+        resultData.setSingleSidedshelfVolume(singleShelfNum);
+        // 现有库存量
+        cell = row.getCell(16);
+        cell.setCellType(CellType.STRING);
+        String curStock = cell.getStringCellValue();
+        resultData.setOnHandInventory(curStock);
+        return resultData;
+    *
+    * */
     /**
      * 提取每一行中需要的数据，构造成为一个结果数据对象
      * 当该行中有单元格的数据为空或不合法时，忽略该行的数据
@@ -136,37 +193,39 @@ public class excelReader {
         Cell cell;
 
         // 获取编码
-        cell = row.getCell(0) == null ? row.createCell(0): row.getCell(0);
+        cell = row.getCell(0);
         String name = checkType(cell);
         resultData.setProductCode(name);
         // 获取品名
-        cell = row.getCell(1) == null ? row.createCell(1): row.getCell(1);
+        cell = row.getCell(1);
         String pCode = checkType(cell);
         resultData.setProductName(pCode);
         // 获取配送周期
-        cell = row.getCell(6) == null ? row.createCell(6): row.getCell(6);
+        cell = row.getCell(5);
         String day = checkType(cell);
         resultData.setDeliveryCycle(day);
         // 获取日均销量
-        cell = row.getCell(8) == null ? row.createCell(8): row.getCell(8);
+        cell = row.getCell(7);
         String averDSales = checkType(cell);
         resultData.setAverageDailySales(averDSales);
         // 获取商品陈列面位数
-        cell = row.getCell(10) == null ? row.createCell(10): row.getCell(10);
+        cell = row.getCell(10);
         String count = checkType(cell);
         resultData.setShelfCount(count);
         // 获取货架纵深单面陈列量
-        cell = row.getCell(11) == null ? row.createCell(11): row.getCell(11);
+        cell = row.getCell(11);
         String singleShelfNum = checkType(cell);
         resultData.setSingleSidedshelfVolume(singleShelfNum);
         // 现有库存量
-        cell = row.getCell(18) == null ? row.createCell(18): row.getCell(18);
+        cell = row.getCell(16);
         String curStock = checkType(cell);
         resultData.setOnHandInventory(curStock);
         return resultData;
     }
+
+
     public static String checkType(Cell cell) {
-        if (cell == null) {
+        if(cell==null){
             return null;
         }
         String returnValue = null;
@@ -198,3 +257,5 @@ public class excelReader {
         return returnValue;
     }
 }
+
+
