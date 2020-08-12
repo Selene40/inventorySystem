@@ -1,17 +1,18 @@
-package originalFileOperation;
+package newDesign;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
+
 import java.util.*;
 
-public class excelWriter {
+public class writer {
     /**
      * 生成Excel并写入数据信息
      * @param dataList 数据列表
      * @return 写入数据后的工作簿对象
      */
-    public static Workbook exportData(List<dataVO> dataList){
+/*    public static Workbook exportData(List<dataVO> dataList){
         // 生成xlsx的Excel
         Workbook workbook = new SXSSFWorkbook();
 
@@ -35,7 +36,6 @@ public class excelWriter {
             Row row = sheetOne.createRow(rowNum++);
             convertDataToRowOne(data, row);
         }
-
         // 生成Sheet表，写入第一行的列头
         List<String> cellHeadTwo = new ArrayList<>();
         cellHeadTwo.add("商品编码");
@@ -56,7 +56,6 @@ public class excelWriter {
             Row row = sheetTwo.createRow(rowNum2++);
             convertDataToRowTwo(data, row);
         }
-
         // 生成Sheet表，写入第一行的列头
         List<String> cellHeadThree = new ArrayList<>();
         cellHeadThree.add("商品编码");
@@ -78,28 +77,8 @@ public class excelWriter {
             convertDataToRowThree(data, row);
         }
 
-        // 生成Sheet表，写入第一行的列头
-        List<String> cellHeadFour = new ArrayList<>();
-        cellHeadFour.add("商品编码");
-        cellHeadFour.add("品名");
-        cellHeadFour.add("堆头端架陈列量");
-        Sheet sheetFour = buildDataSheet(workbook, cellHeadFour);
-        //构建每行的数据内容
-        int rowNum4 = 1;
-        for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
-            dataVO data = it.next();
-            if (data == null) {
-                continue;
-            }
-            // 是否合理库存
-            if (!data.validInventory()) continue;
-            //输出行数据
-            Row row = sheetFour.createRow(rowNum4++);
-            convertDataToRowFour(data, row);
-        }
-
         return workbook;
-    }
+    }*/
 
     /**
      * 生成sheet表，并写入第一行数据（列头）
@@ -153,33 +132,13 @@ public class excelWriter {
         style.setFont(font);
         return style;
     }
-
-    /**
-     * 单品货架排面数报表
+/*
+    *//**
+     * 将数据转换成行
      * @param data 源数据
      * @param row 行对象
      * @return
-     */
-    private static void convertDataToRowOne(dataVO data, Row row){
-        int cellNum = 0;
-        Cell cell;
-        // 商品编码
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
-        // 品名
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
-        // 商品陈列面位数
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getShelfCount() ? "" : data.getShelfCount());
-    }
-
-    /**
-     * 库存量上限计算退仓量
-     * @param data 源数据
-     * @param row 行对象
-     * @return
-     */
+     *//*
     private static void convertDataToRowTwo(dataVO data, Row row){
         int cellNum = 0;
         Cell cell;
@@ -191,18 +150,38 @@ public class excelWriter {
         cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
         // 超过库存上限量
         cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getWithdrawal() ? "" : data.getWithdrawal());
+        cell.setCellValue(null == data.getExceedNum() ? "" : data.getExceedNum());
         // 超过库存上限预警
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getExceedStatus() ? "" : data.getExceedStatus());
     }
 
-    /**
-     * 库存量下限计算续订量
+    *//**
+     * 将数据转换成行
      * @param data 源数据
      * @param row 行对象
      * @return
-     */
+     *//*
+    private static void convertDataToRowOne(dataVO data, Row row){
+        int cellNum = 0;
+        Cell cell;
+        // 商品编码
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
+        // 品名
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
+        // 商品陈列面位数
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getMerchandiseDisplayArea() ? "" : data.getMerchandiseDisplayArea());
+    }
+
+    *//**
+     * 将数据转换成行
+     * @param data 源数据
+     * @param row 行对象
+     * @return
+     *//*
     private static void convertDataToRowThree(dataVO data, Row row){
         int cellNum = 0;
         Cell cell;
@@ -214,29 +193,9 @@ public class excelWriter {
         cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
         // 低于库存下限补货量
         cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getRenewal() ? "" : data.getRenewal());
+        cell.setCellValue(null == data.getBelowNum() ? "" : data.getBelowNum());
         // 低于库存下限补货
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getBelowStatus() ? "" : data.getBelowStatus());
-    }
-
-    /**
-     * 堆头端架陈列量
-     * @param data 源数据
-     * @param row 行对象
-     * @return
-     */
-    private static void convertDataToRowFour(dataVO data, Row row){
-        int cellNum = 0;
-        Cell cell;
-        // 商品编码
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
-        // 品名
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
-        // 堆头端架陈列量
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getAmountOnDisplay() ? "" : data.getAmountOnDisplay());
-    }
+    }*/
 }

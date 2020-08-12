@@ -111,9 +111,8 @@ public class excelReader {
                     System.out.println(resultData.getProductName());
                     System.out.println(resultData.getProductCode());
                     System.out.println(resultData.getAverageDailySales());
-                    System.out.println(resultData.getLowerLimit());
-                    System.out.println(resultData.getUpperLimit());
                     System.out.println(resultData.getOnHandInventory());
+                    System.out.println(resultData.getSingleSidedshelfVolume());
                 }*/
                 if (null == resultData) {
                     logger.warning("第 " + row.getRowNum() + "行数据不合法，已忽略！");
@@ -143,28 +142,24 @@ public class excelReader {
         cell = row.getCell(1) == null ? row.createCell(1): row.getCell(1);
         String pCode = checkType(cell);
         resultData.setProductName(pCode);
-        // 获取配送周期
-        cell = row.getCell(6) == null ? row.createCell(6): row.getCell(6);
-        String day = checkType(cell);
-        resultData.setDeliveryCycle(day);
         // 获取日均销量
-        cell = row.getCell(8) == null ? row.createCell(8): row.getCell(8);
+        cell = row.getCell(2) == null ? row.createCell(2): row.getCell(2);
         String averDSales = checkType(cell);
         resultData.setAverageDailySales(averDSales);
-        // 获取商品陈列面位数
-        cell = row.getCell(10) == null ? row.createCell(10): row.getCell(10);
-        String count = checkType(cell);
-        resultData.setShelfCount(count);
-        // 获取货架纵深单面陈列量
-        cell = row.getCell(11) == null ? row.createCell(11): row.getCell(11);
-        String singleShelfNum = checkType(cell);
-        resultData.setSingleSidedshelfVolume(singleShelfNum);
         // 现有库存量
-        cell = row.getCell(18) == null ? row.createCell(18): row.getCell(18);
+        cell = row.getCell(3) == null ? row.createCell(3): row.getCell(3);
         String curStock = checkType(cell);
         resultData.setOnHandInventory(curStock);
+        // 获取货架纵深单面陈列量
+        cell = row.getCell(4) == null ? row.createCell(4): row.getCell(4);
+        String singleShelfNum = checkType(cell);
+        resultData.setSingleSidedshelfVolume(singleShelfNum);
+
+        resultData.init();
+
         return resultData;
     }
+
     public static String checkType(Cell cell) {
         if (cell == null) {
             return null;

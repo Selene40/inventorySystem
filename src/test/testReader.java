@@ -1,3 +1,4 @@
+/*
 package test;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -32,13 +33,15 @@ public class testReader {
     private static final String XLS = "xls";
     private static final String XLSX = "xlsx";
 
-    /**
+    */
+/**
      * 根据文件后缀名类型获取对应的工作簿对象
      * @param inputStream 读取文件的输入流
      * @param fileType 文件后缀名类型（xls或xlsx）
      * @return 包含文件数据的工作簿对象
      * @throws IOException
-     */
+     *//*
+
     public static Workbook getWorkbook(InputStream inputStream, String fileType) throws IOException {
         Workbook workbook = null;
         if (fileType.equalsIgnoreCase(XLS)) {
@@ -49,11 +52,13 @@ public class testReader {
         return workbook;
     }
 
-    /**
+    */
+/**
      * 读取Excel文件内容
      * @param fileName 要读取的Excel文件所在路径
      * @return 读取结果列表，读取失败时返回null
-     */
+     *//*
+
     public static List<dataVO> readExcel(String fileName) {
 
         Workbook workbook = null;
@@ -92,11 +97,13 @@ public class testReader {
         }
     }
 
-    /**
+    */
+/**
      * 解析Excel数据
      * @param workbook Excel工作簿对象
      * @return 解析结果
-     */
+     *//*
+
     private static List<dataVO> parseExcel(Workbook workbook) {
         List<dataVO> resultDataList = new ArrayList<>();
         // 解析sheet
@@ -121,6 +128,7 @@ public class testReader {
                     continue;
                 }
                 dataVO resultData = convertRowToData(row);
+*/
 /*                if (rowNum == rowStart + 1) {
                 System.out.println(resultData.getProductName());
                 System.out.println(resultData.getProductCode());
@@ -128,7 +136,8 @@ public class testReader {
                 System.out.println(resultData.getLowerLimit());
                 System.out.println(resultData.getUpperLimit());
                 System.out.println(resultData.getOnHandInventory());
-            }*/
+            }*//*
+
                 if (null == resultData) {
                     logger.warning("第 " + row.getRowNum() + "行数据不合法，已忽略！");
                     continue;
@@ -140,7 +149,8 @@ public class testReader {
     }
 
 
-    /*
+    */
+/*
     *         dataVO resultData = new dataVO();
         Cell cell;
 
@@ -181,13 +191,16 @@ public class testReader {
         resultData.setOnHandInventory(curStock);
         return resultData;
     *
-    * */
-    /**
+    * *//*
+
+    */
+/**
      * 提取每一行中需要的数据，构造成为一个结果数据对象
      * 当该行中有单元格的数据为空或不合法时，忽略该行的数据
      * @param row 行数据
      * @return 解析后的行数据对象，行数据错误时返回null
-     */
+     *//*
+
     private static dataVO convertRowToData(Row row) {
         dataVO resultData = new dataVO();
         Cell cell;
@@ -259,3 +272,4 @@ public class testReader {
 }
 
 
+*/
