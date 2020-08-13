@@ -92,10 +92,11 @@ public class excelWriter {
                 continue;
             }
             // 是否合理库存
-            if (!data.validInventory()) continue;
-            //输出行数据
-            Row row = sheetFour.createRow(rowNum4++);
-            convertDataToRowFour(data, row);
+            if (Double.valueOf(data.getAverageDailySales()) >= 2 && data.validInventory()) {
+                //输出行数据
+                Row row = sheetFour.createRow(rowNum4++);
+                convertDataToRowFour(data, row);
+            }
         }
 
         return workbook;

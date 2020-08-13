@@ -84,9 +84,9 @@ public class dataVO {
         this.withdrawal = cur - upperLimit;
     }
 
-    // 处于合理库存区间
+    // 处于合理库存区间, 现有库存量超过货架陈列量的
     public boolean validInventory() {
-        if (cur >= lowerLimit && cur <= upperLimit)
+        if (cur > guaranteedQuaOnShelf)
             return true;
         else
             return false;
@@ -99,17 +99,17 @@ public class dataVO {
 
     // 续订量
     public String getRenewal() {
-        return "" + (int)Math.abs(renewal);
+        return "" + (int)Math.round(Math.abs(renewal));
     }
 
     // 退仓量
     public String getWithdrawal() {
-        return "" + (int)Math.abs(withdrawal);
+        return "" + (int)Math.round(Math.abs(withdrawal));
     }
 
     // 堆头端架陈列量
     public String getAmountOnDisplay() {
-        return "" + (int)amountOnDisplay;
+        return "" + (int)Math.round(amountOnDisplay);
     }
 
     public String getExceedStatus() {

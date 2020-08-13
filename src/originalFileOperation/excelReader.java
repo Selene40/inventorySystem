@@ -167,11 +167,13 @@ public class excelReader {
         String returnValue = null;
         switch (cell.getCellType()) {
             case NUMERIC:   //数字
-                Double doubleValue = cell.getNumericCellValue();
+                returnValue = "" + cell.getNumericCellValue();
 
-                // 格式化科学计数法，取一位整数
-                DecimalFormat df = new DecimalFormat("0");
-                returnValue = df.format(doubleValue);
+/*                Double doubleValue = cell.getNumericCellValue();
+                returnValue = "" + Math.floor(doubleValue);*/
+/*                // 格式化科学计数法，取一位整数
+                DecimalFormat df = new DecimalFormat("##.##");
+                returnValue = df.format(doubleValue);*/
                 break;
             case STRING:    //字符串
                 returnValue = cell.getStringCellValue();
