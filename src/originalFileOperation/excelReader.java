@@ -150,10 +150,6 @@ public class excelReader {
         cell = row.getCell(3) == null ? row.createCell(3): row.getCell(3);
         String curStock = checkType(cell);
         resultData.setOnHandInventory(curStock);
-        // 获取货架纵深单面陈列量
-        cell = row.getCell(4) == null ? row.createCell(4): row.getCell(4);
-        String singleShelfNum = checkType(cell);
-        resultData.setSingleSidedshelfVolume(singleShelfNum);
 
         resultData.init();
 

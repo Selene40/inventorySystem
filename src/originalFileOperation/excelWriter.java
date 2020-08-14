@@ -22,8 +22,9 @@ public class excelWriter {
         List<String> cellHeadOne = new ArrayList<>();
         cellHeadOne.add("商品编码");
         cellHeadOne.add("品名");
-        cellHeadOne.add("商品陈列面位数");
+        cellHeadOne.add("单品货架排面数");
         Sheet sheetOne = buildDataSheet(workbook, cellHeadOne);
+        workbook.setSheetName(0, "单品货架排面数报表");
         //构建每行的数据内容
         int rowNum = 1;
         for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
@@ -37,12 +38,32 @@ public class excelWriter {
         }
 
         // 生成Sheet表，写入第一行的列头
+        List<String> cellHeadFive = new ArrayList<>();
+        cellHeadFive.add("商品编码");
+        cellHeadFive.add("品名");
+        cellHeadFive.add("单品货架纵列数");
+        Sheet sheetFive = buildDataSheet(workbook, cellHeadFive);
+        workbook.setSheetName(1, "单品货架纵列数报表");
+        //构建每行的数据内容
+        int rowNum5 = 1;
+        for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
+            dataVO data = it.next();
+            if (data == null) {
+                continue;
+            }
+            //输出行数据
+            Row row = sheetFive.createRow(rowNum5++);
+            convertDataToRowFive(data, row);
+        }
+
+        // 生成Sheet表，写入第一行的列头
         List<String> cellHeadTwo = new ArrayList<>();
         cellHeadTwo.add("商品编码");
         cellHeadTwo.add("品名");
         cellHeadTwo.add("超过库存上限");
         cellHeadTwo.add("超过库存上限预警");
         Sheet sheetTwo = buildDataSheet(workbook, cellHeadTwo);
+        workbook.setSheetName(2, "退仓量报表");
         //构建每行的数据内容
         int rowNum2 = 1;
         for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
@@ -64,6 +85,7 @@ public class excelWriter {
         cellHeadThree.add("低于库存下限补货量");
         cellHeadThree.add("低于库存下限补货");
         Sheet sheetThree = buildDataSheet(workbook, cellHeadThree);
+        workbook.setSheetName(3, "续订量报表");
         //构建每行的数据内容
         int rowNum3 = 1;
         for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
@@ -84,6 +106,7 @@ public class excelWriter {
         cellHeadFour.add("品名");
         cellHeadFour.add("堆头端架陈列量");
         Sheet sheetFour = buildDataSheet(workbook, cellHeadFour);
+        workbook.setSheetName(4, "堆头端架陈列量报表");
         //构建每行的数据内容
         int rowNum4 = 1;
         for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
@@ -170,9 +193,29 @@ public class excelWriter {
         // 品名
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
-        // 商品陈列面位数
+        // 单品货架排面数
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getShelfCount() ? "" : data.getShelfCount());
+    }
+
+    /**
+     * 单品货架纵列数报表
+     * @param data 源数据
+     * @param row 行对象
+     * @return
+     */
+    private static void convertDataToRowFive(dataVO data, Row row){
+        int cellNum = 0;
+        Cell cell;
+        // 商品编码
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
+        // 品名
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
+        // 单品货架纵列数
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getSingleSidedshelfVolume() ? "" : data.getSingleSidedshelfVolume());
     }
 
     /**
