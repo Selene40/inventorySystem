@@ -1,27 +1,35 @@
 package originalFileOperation;
 
 import org.apache.poi.ss.usermodel.Workbook;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
-
 public class multiStore {
     private static Logger logger = Logger.getLogger(mainTest.class.getName());
-    public static void operation(String input, String output) {
+    public static void operation(String input) {
         // 设定Excel文件所在路径
         String excelFileName = "./inputFiles/" + input;
         // 读取Excel文件内容
         List<dataVO> readResult = excelReader.readExcel(excelFileName);
         // 写入数据到工作簿对象内
-        Workbook workbook = excelWriter.exportData(readResult);
-        // 以文件的形式输出工作簿对象
-        FileOutputStream fileOut = null;
+        Workbook workbookPart = excelWriter.exportData(readResult);
+        Workbook workbookAll = excelWriterAll.exportData(readResult);
+        // 以文件的形式输出单一样式的文件
+        FileOutputStream fileOutPart = null;
+        String exportFilePathPart = "./outputFiles/" + input.substring(0, input.length() - 5)+ "_单一报表.xlsx";
+        outputFile(fileOutPart, exportFilePathPart, workbookPart);
+        // 以文件的形式输出合并样式的文件
+        FileOutputStream fileOutAll = null;
+        String exportFilePathAll = "./outputFiles/" + input.substring(0, input.length() - 5)+ "_合并报表.xlsx";
+        outputFile(fileOutAll, exportFilePathAll, workbookAll);
+    }
+
+    public static void outputFile(FileOutputStream fileOut, String input, Workbook workbook) {
         try {
-            String exportFilePath = "./outputFiles/" + output;
+            String exportFilePath = input;
             File exportFile = new File(exportFilePath);
             if (!exportFile.exists()) {
                 exportFile.createNewFile();

@@ -85,7 +85,7 @@ public class excelReader {
      */
     private static List<dataVO> parseExcel(Workbook workbook) {
         List<dataVO> resultDataList = new ArrayList<>();
-        // 解析sheet
+        // 按照sheet个数，依次解析sheet
         for (int sheetNum = 0; sheetNum < workbook.getNumberOfSheets(); sheetNum++) {
             Sheet sheet = workbook.getSheetAt(sheetNum);
             // 校验sheet是否合法
