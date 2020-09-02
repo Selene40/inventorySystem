@@ -1,16 +1,10 @@
-/*
-
-import java.util.List;
-import java.util.logging.Logger;
+package test;
 
 public class readtest {
-    private static Logger logger = Logger.getLogger(mainTest.class.getName());
-
     public static void main(String[] args) {
-        // 设定Excel文件所在路径
-        String excelFileName = "./inputFiles/testFile.xlsx";
-        // 读取Excel文件内容
-        List<dataVO> readResult = excelReader.readExcel(excelFileName);
+        System.out.println((int)(-1.5));
+        System.out.println(Math.round(-3.8));
+        System.out.println(Math.round(3.8));
+        System.out.println((int)Math.round(-2.9));
     }
 }
-*/

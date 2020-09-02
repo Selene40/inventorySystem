@@ -6,6 +6,7 @@ public class dataVO {
     private String productName; // 品名
     private String averageDailySales; // 日均销量
     private String onHandInventory; // 现有库存量
+    private String itemAttribute; // 单品属性
 
     private int deliveryCycle = 3; // 配送周期
     private int dailyProductsDays = 10;//店日销存货天数
@@ -57,16 +58,38 @@ public class dataVO {
         cur = Double.valueOf(onHandInventory);
     }
 
+    public String getItemCategory() {
+        return itemAttribute;
+    }
+
+    public void setItemCategory(String itemAttribute) {
+        this.itemAttribute = itemAttribute;
+    }
+
     public void init() {
-        if (avg >= 10) {
-            this.shelfCount = 6;
-        } else if (avg >= 3 && avg < 10) {
-            this.shelfCount = 4;
-        } else if (avg >= 1 && avg < 3) {
-            this.shelfCount = 2;
-        } else {
-            this.shelfCount = 1;
+        int tempByItemAttribute = 0;
+        if (itemAttribute.equals("必售")) {
+            tempByItemAttribute = 6;
+        } else if (itemAttribute.equals("流行") || itemAttribute.equals("季节")) {
+            tempByItemAttribute = 4;
+        } else if (itemAttribute.equals("结构") || itemAttribute.equals("特产")) {
+            tempByItemAttribute = 2;
+        } else if (itemAttribute.equals("普通")) {
+            tempByItemAttribute = 1;
         }
+
+        int tempByDailySales = 0;
+        if (avg >= 10) {
+            tempByDailySales = 6;
+        } else if (avg >= 3 && avg < 10) {
+            tempByDailySales = 4;
+        } else if (avg >= 1 && avg < 3) {
+            tempByDailySales = 2;
+        } else {
+            tempByDailySales = 1;
+        }
+
+        this.shelfCount = Math.max(tempByDailySales, tempByItemAttribute);
 
         if (avg >= 10) {
             this.singleSidedshelfVolume = 4;
@@ -105,28 +128,28 @@ public class dataVO {
 
     // 续订量
     public String getRenewal() {
-        return "" + (int) Math.round(Math.abs(renewal));
+        return "" + Math.round(Math.abs(renewal));
     }
 
     // 退仓量
     public String getWithdrawal() {
-        return "" + (int) Math.round(Math.abs(withdrawal));
+        return "" + Math.round(Math.abs(withdrawal));
     }
 
     // 堆头端架陈列量
     public String getAmountOnDisplay() {
-        return "" + (int) Math.round(amountOnDisplay);
+        return "" + Math.round(amountOnDisplay);
     }
 
     public String getExceedStatus() {
-        if (withdrawal > 0)
+        if (Math.round(withdrawal) >= 1)
             return "退仓";
         else
             return null;
     }
 
     public String getBelowStatus() {
-        if (renewal < 0)
+        if (Math.round(renewal) <= -1)
             return "补货";
         else
             return null;

@@ -150,6 +150,10 @@ public class excelReader {
         cell = row.getCell(3) == null ? row.createCell(3): row.getCell(3);
         String curStock = checkType(cell);
         resultData.setOnHandInventory(curStock);
+        // 单品属性
+        cell = row.getCell(4) == null ? row.createCell(4): row.getCell(4);
+        String attribute = checkType(cell);
+        resultData.setItemCategory(attribute);
 
         resultData.init();
 
