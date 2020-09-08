@@ -7,10 +7,11 @@ public class dataVO {
     private String averageDailySales; // 日均销量
     private String onHandInventory; // 现有库存量
     private String itemAttribute; // 单品属性
+    private String bottomSize;//单品底部尺寸
 
     private int deliveryCycle = 3; // 配送周期
     private int dailyProductsDays = 10;//店日销存货天数
-    private double avg, cur;//日均销量, 现有库存量 的整数型; 架存放纵列量(oneShelf)
+    private double avg, cur, size;//日均销量, 现有库存量, 单品底部尺寸 的整数型; 架存放纵列量(oneShelf)
 
     //计算得到的
     private int shelfCount; // 商品货架陈列排面数
@@ -66,6 +67,15 @@ public class dataVO {
         this.itemAttribute = itemAttribute;
     }
 
+    public String getBottomSize() {
+        return bottomSize;
+    }
+
+    public void setBottomSize(String bottomSize) {
+        this.bottomSize = bottomSize;
+        size = Double.valueOf(bottomSize);
+    }
+
     public void init() {
         int tempByItemAttribute = 0;
         if (itemAttribute.equals("必售")) {
@@ -91,12 +101,25 @@ public class dataVO {
 
         this.shelfCount = Math.max(tempByDailySales, tempByItemAttribute);
 
+
+        if (shelfCount > 4 && size > 10) {
+            this.shelfCount /= 2;
+        }
+
+        if (itemAttribute.equals("禁采")) {
+            this.shelfCount = 0;
+        }
+
         if (avg >= 10) {
             this.singleSidedshelfVolume = 4;
         } else if (avg >= 3 && avg < 10) {
             this.singleSidedshelfVolume = 3;
         } else {
             this.singleSidedshelfVolume = 2;
+        }
+
+        if (itemAttribute.equals("禁采")) {
+            this.singleSidedshelfVolume = 0;
         }
 
         this.guaranteedQuantity = avg * (dailyProductsDays + deliveryCycle);

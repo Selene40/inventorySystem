@@ -107,7 +107,7 @@ public class excelReader {
                     continue;
                 }
                 dataVO resultData = convertRowToData(row);
-/*                if (rowNum == rowStart + 1) {
+                /*  if (rowNum == rowStart + 1) {
                     System.out.println(resultData.getProductName());
                     System.out.println(resultData.getProductCode());
                     System.out.println(resultData.getAverageDailySales());
@@ -151,9 +151,18 @@ public class excelReader {
         String curStock = checkType(cell);
         resultData.setOnHandInventory(curStock);
         // 单品属性
-        cell = row.getCell(4) == null ? row.createCell(4): row.getCell(4);
-        String attribute = checkType(cell);
-        resultData.setItemCategory(attribute);
+        //cell = row.getCell(4) == null ? row.createCell(4): row.getCell(4);
+        if (row.getCell(4) == null) {
+            resultData.setItemCategory("*");
+        } else {
+            cell = row.getCell(4);
+            String attribute = checkType(cell);
+            resultData.setItemCategory(attribute);
+        }
+        //单品底部尺寸
+        cell = row.getCell(5) == null ? row.createCell(5): row.getCell(5);
+        String size = checkType(cell);
+        resultData.setBottomSize(size);
 
         resultData.init();
 

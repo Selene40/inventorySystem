@@ -2,6 +2,8 @@ package originalFileOperation;
 
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class excelWriterAll {
@@ -22,6 +24,7 @@ public class excelWriterAll {
         List<String> cellHead = new ArrayList<>();
         cellHead.add("商品编码");
         cellHead.add("品名");
+        cellHead.add("单品属性");
         cellHead.add("日均销量");
         cellHead.add("现有库存量");
         cellHead.add("单品货架排面数");
@@ -29,6 +32,7 @@ public class excelWriterAll {
         cellHead.add("低库下限补货量");
         cellHead.add("超库上限退仓量");
         cellHead.add("畅销品堆端可陈列量");
+        cellHead.add("禁采清仓量");
         Sheet sheet = buildDataSheet(workbook, cellHead);
         workbook.setSheetName(0, "综合报表");
         //构建每行的数据内容
@@ -60,12 +64,24 @@ public class excelWriterAll {
         // 品名
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
+        //单品属性
+        cell = row.createCell(cellNum++);
+        cell.setCellValue("*" == data.getItemCategory()? "" : data.getItemCategory());
         //日均销量
         cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getAverageDailySales()? "" : data.getAverageDailySales());
+        if (null == data.getAverageDailySales()) {
+            cell.setCellValue("");
+        } else {
+            String avg = data.getAverageDailySales();
+            double val = Double.valueOf(avg);
+            DecimalFormat df = new DecimalFormat("##.##");
+            avg = df.format(val);
+            cell.setCellValue(avg);
+        }
+        //cell.setCellValue(null == data.getAverageDailySales()? "" : data.getAverageDailySales());
         //现有库存量
         cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getOnHandInventory()? "" : data.getOnHandInventory());
+        cell.setCellValue(null == data.getOnHandInventory()? "" : data.getOnHandInventory().substring(0,data.getOnHandInventory().length() - 2));
         //单品货架排面数
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getShelfCount() ? "" : data.getShelfCount());
@@ -90,6 +106,15 @@ public class excelWriterAll {
         cell = row.createCell(cellNum++);
         if (Double.valueOf(data.getAverageDailySales()) >= 2 && data.validInventory()) {
             cell.setCellValue(null == data.getAmountOnDisplay() ? "" : data.getAmountOnDisplay());
+        } else {
+            cell.setCellValue("");
+        }
+        //禁采清仓量
+        cell = row.createCell(cellNum++);
+        if (data.getItemCategory().equals("禁采")) {
+            if (null != data.getOnHandInventory() && !(data.getOnHandInventory().substring(0,data.getOnHandInventory().length() - 2)).equals("0")) {
+                cell.setCellValue(data.getOnHandInventory().substring(0,data.getOnHandInventory().length() - 2));
+            }
         } else {
             cell.setCellValue("");
         }

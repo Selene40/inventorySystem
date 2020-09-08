@@ -122,6 +122,51 @@ public class excelWriter {
             }
         }
 
+        // 生成采购完善单品属性报告表，写入第一行的列头
+        List<String> cellHeadFive = new ArrayList<>();
+        cellHeadFive.add("商品编码");
+        cellHeadFive.add("品名");
+        cellHeadFive.add("单品属性");
+        Sheet sheetFive = buildDataSheet(workbook, cellHeadFive);
+        workbook.setSheetName(4, "采购完善单品属性报表");
+        //构建每行的数据内容
+        int rowNum5 = 1;
+        for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
+            dataVO data = it.next();
+            if (data == null) {
+                continue;
+            }
+            // 是否合理库存
+            if (data.getItemCategory() == "*") {
+                //输出行数据
+                Row row = sheetFive.createRow(rowNum5++);
+                convertDataToRowFive(data, row);
+            }
+        }
+
+        // 生成禁采商品清仓报表，写入第一行的列头
+        List<String> cellHeadSix = new ArrayList<>();
+        cellHeadSix.add("商品编码");
+        cellHeadSix.add("品名");
+        cellHeadSix.add("单品属性");
+        cellHeadSix.add("库存量");
+        Sheet sheetSix = buildDataSheet(workbook, cellHeadSix);
+        workbook.setSheetName(5, "禁采商品清仓报表");
+        //构建每行的数据内容
+        int rowNum6 = 1;
+        for (Iterator<dataVO> it = dataList.iterator(); it.hasNext(); ) {
+            dataVO data = it.next();
+            if (data == null) {
+                continue;
+            }
+            // 是否合理库存
+            if (data.getItemCategory().equals("禁采") && !data.getOnHandInventory().equals("0.0")) {
+                //输出行数据
+                Row row = sheetSix.createRow(rowNum6++);
+                convertDataToRowSix(data, row);
+            }
+        }
+
         return workbook;
     }
 
@@ -201,25 +246,6 @@ public class excelWriter {
         cell.setCellValue(null == data.getSingleSidedshelfVolume() ? "" : data.getSingleSidedshelfVolume());
     }
 
-    /**
-     * 单品货架纵列数报表
-     * @param data 源数据
-     * @param row 行对象
-     * @return
-     */
-    private static void convertDataToRowFive(dataVO data, Row row){
-        int cellNum = 0;
-        Cell cell;
-        // 商品编码
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
-        // 品名
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
-        // 单品货架纵列数
-        cell = row.createCell(cellNum++);
-        cell.setCellValue(null == data.getSingleSidedshelfVolume() ? "" : data.getSingleSidedshelfVolume());
-    }
 
     /**
      * 库存量上限计算退仓量
@@ -285,5 +311,48 @@ public class excelWriter {
         // 堆头端架陈列量
         cell = row.createCell(cellNum++);
         cell.setCellValue(null == data.getAmountOnDisplay() ? "" : data.getAmountOnDisplay());
+    }
+
+    /**
+     * 单品货架纵列数报表
+     * @param data 源数据
+     * @param row 行对象
+     * @return
+     */
+    private static void convertDataToRowFive(dataVO data, Row row){
+        int cellNum = 0;
+        Cell cell;
+        // 商品编码
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
+        // 品名
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
+        // 单品属性
+        cell = row.createCell(cellNum++);
+        cell.setCellValue("空");
+    }
+
+    /**
+     * 单品货架纵列数报表
+     * @param data 源数据
+     * @param row 行对象
+     * @return
+     */
+    private static void convertDataToRowSix(dataVO data, Row row){
+        int cellNum = 0;
+        Cell cell;
+        // 商品编码
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductCode() ? "" : data.getProductCode());
+        // 品名
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(null == data.getProductName() ? "" : data.getProductName());
+        // 单品属性
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(data.getItemCategory());
+        // 库存量
+        cell = row.createCell(cellNum++);
+        cell.setCellValue(data.getOnHandInventory().substring(0,data.getOnHandInventory().length() - 2));
     }
 }
